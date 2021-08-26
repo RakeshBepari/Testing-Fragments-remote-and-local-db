@@ -8,7 +8,6 @@ import androidx.test.filters.SmallTest
 import com.example.learningtesting.getOrAwaitValue
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
 import org.junit.Before
@@ -46,7 +45,7 @@ class ShoppingDaoTest {
         val shoppingItem = ShoppingItem("name", 2, 500f, "url", 1)
         dao.insertShoppingItem(shoppingItem)
 
-        val allShoppingItem = dao.getAllShoppingItems().getOrAwaitValue()
+        val allShoppingItem = dao.observeAllShoppingItmes().getOrAwaitValue()
 
         assertThat(allShoppingItem).contains(shoppingItem)
     }
@@ -57,7 +56,7 @@ class ShoppingDaoTest {
         dao.insertShoppingItem(shoppingItem)
         dao.deleteShoppingItem(shoppingItem)
 
-        val allShoppingItems = dao.getAllShoppingItems().getOrAwaitValue()
+        val allShoppingItems = dao.observeAllShoppingItmes().getOrAwaitValue()
 
         assertThat(allShoppingItems).doesNotContain(shoppingItem)
 
