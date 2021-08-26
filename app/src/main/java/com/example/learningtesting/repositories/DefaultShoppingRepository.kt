@@ -6,7 +6,6 @@ import com.example.learningtesting.data.local.ShoppingItem
 import com.example.learningtesting.data.remote.PixabayAPI
 import com.example.learningtesting.data.remote.responses.ImageResponse
 import com.example.learningtesting.other.Resource
-import retrofit2.Response
 import javax.inject.Inject
 
 class DefaultShoppingRepository @Inject constructor(
