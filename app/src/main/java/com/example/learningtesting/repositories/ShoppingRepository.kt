@@ -14,7 +14,7 @@ interface ShoppingRepository {
 
     fun observeAllShoppingItem(): LiveData<List<ShoppingItem>>
 
-    fun observeTotalPriceOfShoppingItem(): LiveData<Float>
+    fun observeTotalPriceOfShoppingItems(): LiveData<Float>
 
     fun getImage(queryImage:String): Resource<ImageResponse>
 }
