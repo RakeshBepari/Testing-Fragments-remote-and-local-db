@@ -5,8 +5,15 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
+import com.example.learningtesting.HiltTestRunner
+import com.example.learningtesting.di.AppModule
 import com.example.learningtesting.getOrAwaitValue
+import com.example.learningtesting.launchFragmentInHiltContainer
+import com.example.learningtesting.ui.ShoppingFragment
 import com.google.common.truth.Truth.assertThat
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
@@ -14,24 +21,29 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
+import javax.inject.Inject
+import javax.inject.Named
 
 @ExperimentalCoroutinesApi
-@RunWith(AndroidJUnit4::class)
 @SmallTest
+@HiltAndroidTest
 class ShoppingDaoTest {
+
+    @get:Rule
+    var hiltRule = HiltAndroidRule(this)
 
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    private lateinit var shoppingDatabase: ShoppingDatabase
+    @Inject
+    @Named("Test_Db")
+    lateinit var shoppingDatabase: ShoppingDatabase
     private lateinit var dao: ShoppingDao
 
     @Before
     fun setup() {
-        shoppingDatabase = Room.inMemoryDatabaseBuilder(
-            ApplicationProvider.getApplicationContext(),
-            ShoppingDatabase::class.java
-        ).allowMainThreadQueries().build()
+        hiltRule.inject()
         dao = shoppingDatabase.shoppingDao()
     }
 
