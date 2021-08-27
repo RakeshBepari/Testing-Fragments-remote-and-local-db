@@ -28,7 +28,7 @@ class DefaultShoppingRepository @Inject constructor(
         return shoppingDao.observeTotalPrice()
     }
 
-    override fun getImage(queryImage: String): Resource<ImageResponse> {
+    override fun searchForImage(queryImage: String): Resource<ImageResponse> {
         return try {
             val response = pixabayAPI.getImagefromPixabay(queryImage)
             if (response.isSuccessful){

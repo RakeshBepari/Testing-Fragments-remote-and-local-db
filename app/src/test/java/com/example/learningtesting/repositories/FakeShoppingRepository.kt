@@ -50,7 +50,7 @@ class FakeShoppingRepository : ShoppingRepository {
         return observableTotalPrice
     }
 
-    override fun getImage(queryImage: String): Resource<ImageResponse> {
+    override fun searchForImage(queryImage: String): Resource<ImageResponse> {
         return if (shouldReturnNetworkError){
             Resource.error("Error",null)
         }else{
