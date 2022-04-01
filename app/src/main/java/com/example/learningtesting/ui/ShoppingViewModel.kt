@@ -43,7 +43,7 @@ class ShoppingViewModel @ViewModelInject constructor(
         repository.insertShoppingItem(shoppingItem)
     }
 
-    fun insertShoppingItemValidation(name: String, amountString: String, priceString: String) {
+    fun validateAndInsertShoppingItem(name: String, amountString: String, priceString: String) {
         if ( name.isEmpty() || amountString.isEmpty() || priceString.isEmpty()){
             _insertShoppingItemStatus.postValue(Event(Resource.error(
                 "The fields must not be empty",

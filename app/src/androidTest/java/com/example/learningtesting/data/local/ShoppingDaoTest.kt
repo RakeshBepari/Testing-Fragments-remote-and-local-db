@@ -3,36 +3,33 @@ package com.example.learningtesting.data.local
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
-import com.example.learningtesting.HiltTestRunner
-import com.example.learningtesting.di.AppModule
 import com.example.learningtesting.getOrAwaitValue
-import com.example.learningtesting.launchFragmentInHiltContainer
-import com.example.learningtesting.ui.ShoppingFragment
 import com.google.common.truth.Truth.assertThat
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
 import javax.inject.Inject
 import javax.inject.Named
 
 @ExperimentalCoroutinesApi
-@SmallTest
+@SmallTest // For unit tests
 @HiltAndroidTest
 class ShoppingDaoTest {
 
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
+
+    /**
+     * This rule is used to run the code inside the test case sequentially one after another
+     */
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
@@ -43,6 +40,18 @@ class ShoppingDaoTest {
 
     @Before
     fun setup() {
+        /**
+         * We don't initiate the shoppingDatabase like this cause instantiating various variable in various test class in the
+         * @Before function can get messy so we can instead use DI for Test case and Inject have common place for instantiating
+         * all the variables and later we can inject it.
+         *
+         * But the thing to note is the injection works only on instrumented tests i.e. inside the android test directory
+         */
+//        shoppingDatabase = Room.inMemoryDatabaseBuilder(
+//            ApplicationProvider.getApplicationContext(),
+//            ShoppingDatabase::class.java
+//        ).allowMainThreadQueries().build()
+
         hiltRule.inject()
         dao = shoppingDatabase.shoppingDao()
     }
@@ -52,12 +61,18 @@ class ShoppingDaoTest {
         shoppingDatabase.close()
     }
 
+    /**
+     * runBlockingTest is runBlocking for test which is used to run a coroutine on the main thread through which we call
+     * suspend functions
+     */
     @Test
     fun insertShoppingItem() = runBlockingTest {
         val shoppingItem = ShoppingItem("name", 2, 500f, "url", 1)
         dao.insertShoppingItem(shoppingItem)
 
-        val allShoppingItem = dao.observeAllShoppingItmes().getOrAwaitValue()
+        //observeAllShoppingItems() returns a LiveData not a list and LiveData is asynchronous but using the extension function
+        // getOrAwaitValue() we can get the List
+        val allShoppingItem = dao.observeAllShoppingItems().getOrAwaitValue()
 
         assertThat(allShoppingItem).contains(shoppingItem)
     }
@@ -68,7 +83,7 @@ class ShoppingDaoTest {
         dao.insertShoppingItem(shoppingItem)
         dao.deleteShoppingItem(shoppingItem)
 
-        val allShoppingItems = dao.observeAllShoppingItmes().getOrAwaitValue()
+        val allShoppingItems = dao.observeAllShoppingItems().getOrAwaitValue()
 
         assertThat(allShoppingItems).doesNotContain(shoppingItem)
 

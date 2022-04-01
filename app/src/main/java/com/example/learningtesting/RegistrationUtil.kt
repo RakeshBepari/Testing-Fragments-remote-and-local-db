@@ -1,7 +1,7 @@
 package com.example.learningtesting
 
 object RegistrationUtil {
-    private val existingListOfUsers= listOf("Raj","Rohan")
+    private val existingListOfUsers = listOf("Raj", "Rohan")
 
     /**
      * the input is not valid if..
@@ -12,17 +12,17 @@ object RegistrationUtil {
      */
 
     fun validateRegistrationUtil(
-        username:String,
-        password:String,
-        confirmedPassword:String
-    ):Boolean{
+        username: String,
+        password: String,
+        confirmedPassword: String
+    ): Boolean {
         if (username.isEmpty() || password.isEmpty())
             return false
         if (username in existingListOfUsers)
             return false
-        if (password!=confirmedPassword)
+        if (password != confirmedPassword)
             return false
-        if (password.count{it.isDigit()}<2)
+        if (password.count { it.isDigit() } < 2)
             return false
         return true
     }

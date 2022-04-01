@@ -31,7 +31,7 @@ class ShoppingViewModelTest {
 
     @Test
     fun `insert shopping item with empty field, returns error`() {
-        shoppingViewModel.insertShoppingItemValidation("name", "", "5.0")
+        shoppingViewModel.validateAndInsertShoppingItem("name", "", "5.0")
 
         val value = shoppingViewModel.insertShoppingItemStatus.getOrAwaitValueTest()
 
@@ -45,7 +45,7 @@ class ShoppingViewModelTest {
                 append(1)
             }
         }
-        shoppingViewModel.insertShoppingItemValidation(string, "5", "5.0")
+        shoppingViewModel.validateAndInsertShoppingItem(string, "5", "5.0")
 
         val value = shoppingViewModel.insertShoppingItemStatus.getOrAwaitValueTest()
 
@@ -59,7 +59,7 @@ class ShoppingViewModelTest {
                 append(1)
             }
         }
-        shoppingViewModel.insertShoppingItemValidation("name", "5", string)
+        shoppingViewModel.validateAndInsertShoppingItem("name", "5", string)
 
         val value = shoppingViewModel.insertShoppingItemStatus.getOrAwaitValueTest()
 
@@ -69,7 +69,7 @@ class ShoppingViewModelTest {
     @Test
     fun `insert shopping item with too high amount, returns error`() {
 
-        shoppingViewModel.insertShoppingItemValidation("name", "999999999999999999999", "5.0")
+        shoppingViewModel.validateAndInsertShoppingItem("name", "999999999999999999999", "5.0")
 
         val value = shoppingViewModel.insertShoppingItemStatus.getOrAwaitValueTest()
 
@@ -79,7 +79,7 @@ class ShoppingViewModelTest {
     @Test
     fun  `insert shopping item with valid inputs, returns success`(){
 
-        shoppingViewModel.insertShoppingItemValidation("name","5", "5.0")
+        shoppingViewModel.validateAndInsertShoppingItem("name","5", "5.0")
 
         val value = shoppingViewModel.insertShoppingItemStatus.getOrAwaitValueTest()
 
@@ -89,22 +89,13 @@ class ShoppingViewModelTest {
     @Test
     fun  `inserted shopping item , sets curImageUrl to empty string`(){
 
-        shoppingViewModel.insertShoppingItemValidation("name","5", "5.0")
+        shoppingViewModel.validateAndInsertShoppingItem("name","5", "5.0")
 
         val value = shoppingViewModel.insertShoppingItemStatus.getOrAwaitValueTest()
+        val curImageUrl= shoppingViewModel.curImageUrl.getOrAwaitValueTest()
+
         assertThat(value.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
-
-        val currImageUrl = shoppingViewModel.curImageUrl.getOrAwaitValueTest()
-        assertThat(currImageUrl).isEmpty()
-    }
-
-    @Test
-    fun `fun setCurImageUrl sets `(){
-        shoppingViewModel.setCurImageUrl("url")
-
-        val value = shoppingViewModel.curImageUrl.getOrAwaitValueTest()
-
-        assertThat(value).isEqualTo("url")
+        assertThat(curImageUrl).isEmpty()
     }
 
 }

@@ -21,7 +21,7 @@ class DefaultShoppingRepository @Inject constructor(
     }
 
     override fun observeAllShoppingItem(): LiveData<List<ShoppingItem>> {
-        return shoppingDao.observeAllShoppingItmes()
+        return shoppingDao.observeAllShoppingItems()
     }
 
     override fun observeTotalPriceOfShoppingItems(): LiveData<Float> {

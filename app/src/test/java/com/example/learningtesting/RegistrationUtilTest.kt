@@ -46,7 +46,7 @@ class RegistrationUtilTest(){
     }
 
     @Test
-    fun `confirmed password does not matches password returns false`(){
+    fun `confirmed password does not match password returns false`(){
         val result= RegistrationUtil.validateRegistrationUtil(
             "Sohan",
             "123",
@@ -58,7 +58,7 @@ class RegistrationUtilTest(){
     @Test
     fun `password contain less than 2 digits returns false`(){
         val result= RegistrationUtil.validateRegistrationUtil(
-            "",
+            "Phillip",
             "kaksjf2",
             "kaksjf2"
         )
