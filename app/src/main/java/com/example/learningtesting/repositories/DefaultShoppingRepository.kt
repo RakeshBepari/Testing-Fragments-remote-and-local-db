@@ -1,5 +1,6 @@
 package com.example.learningtesting.repositories
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.learningtesting.data.local.ShoppingDao
 import com.example.learningtesting.data.local.ShoppingItem
@@ -28,7 +29,7 @@ class DefaultShoppingRepository @Inject constructor(
         return shoppingDao.observeTotalPrice()
     }
 
-    override fun searchForImage(queryImage: String): Resource<ImageResponse> {
+    override suspend fun searchForImage(queryImage: String): Resource<ImageResponse> {
         return try {
             val response = pixabayAPI.getImagefromPixabay(queryImage)
             if (response.isSuccessful){
@@ -39,6 +40,7 @@ class DefaultShoppingRepository @Inject constructor(
                 Resource.error("Unknown error occurred",null)
             }
         }catch (e:Exception ){
+            Log.e("ShoppingRepository",e.message.toString())
             Resource.error("Network error Check your internet connection", null)
         }
     }
